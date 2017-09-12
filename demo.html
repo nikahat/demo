@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<body>
+
+
+    <div ng-app="newApp" ng-controller="newctrl">
+        {{ firstName + " " + lastName }}
+    </div>
+    <br /><br />
+    <div id="app1" ng-app="myApp" ng-controller="myCtrl" ng-init="person={firstName:'John',lastName:'Doe'}">
+        <!--The ng-model directive binds the value of HTML controls (input, select, textarea) to application data.-->
+        First Name: <input type="text" ng-model="myCol" style="background-color:{{myCol}}" value="{{myCol}}"><br>
+        Last Name: <input type="text" ng-model="lastName"><br>
+        <br>
+        Full Name: {{firstName + " " + lastName}}
+        <br/>
+       {{fullNameMethod()}}
+        <p>Value is  <span ng-bind="5*5"></span></p>
+        <p ng-click="changeName()">click to change name  {{ person.lastName }}</p>
+        
+        <ul>
+            <!--The ng-repeat directive repeats an HTML element:-->
+            <li ng-repeat="x in names">
+                {{ x }}
+            </li>
+        </ul>
+
+        <form  name="myForm">
+            Email:
+            <input type="email" name="myAddress" ng-model="text">
+            <span ng-show="myForm.myAddress.$error.email">Not a valid e-mail address</span>
+
+
+            <h1>Status</h1>
+            <p>Valid: {{myForm.myAddress.$valid}} (if true, the value meets all criteria).</p>
+            <p>Dirty: {{myForm.myAddress.$dirty}} (if true, the value has been changed).</p>
+            <p>Touched: {{myForm.myAddress.$touched}} (if true, the field has been in focus).</p>
+
+        </form>
+
+    </div>
+    <!--When naming a directive, you must use a camel case name, w3TestDirective, but when invoking it, you must use - separated name, w3-test-directive-->
+    <div id="app2" ng-app="myApp2">
+        <w3-test-directive></w3-test-directive>
+        <br/>
+        <w3-test-directive></w3-test-directive>
+        <!-- directive: w3-test-directive -->
+    </div>
+
+</body>
+<script src="newctrl.js"></script>
+<script>
+
+    
+    //module is a container for the application controllers.
+
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function ($scope) {
+        $scope.firstName = "firstname11111";
+        $scope.changeName = function () {
+            $scope.person.lastName = "changed name Nelly";
+        }
+        $scope.fullNameMethod = function () {
+            return "Full name method call:-"+ $scope.firstName + " " + $scope.lastName;
+        };
+        $scope.lastName = "Doe";
+        $scope.names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    });
+    angular.bootstrap(document.getElementById("app1"), ['myApp']);
+
+    //The [] parameter in the module definition can be used to define dependent modules.
+   // Without the [] parameter, you are not creating a new module, but retrieving an existing one.
+    var app2 = angular.module("myApp2", []);
+
+    app2.directive("w3TestDirective", function() {
+        return {
+            //restrict your directives to only be invoked by some of the methods restrict values are: E for Element name, A for Attribute C for Class M for Comment
+            restrict : "E",
+            template : "I am custom directive!"
+        };
+    });
+    //Use this function to manually start up AngularJS application.
+    //angular.bootstrap(element, [modules], [config]);
+    angular.bootstrap(document.getElementById("app2"), ['myApp2']);
+</script>
+</html>
